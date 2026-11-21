@@ -306,7 +306,20 @@ nav .wrap { justify-content: center; position: relative; }
   <div class="links"><a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#motions">Motions</a><a href="#text">Text to motion</a><a href="#bibtex">BibTeX</a></div>
 </div></nav>
 
-<video class="hero-video" src="media/hero_loop.mp4" poster="media/hero_poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+<video class="hero-video" poster="media/hero_poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"><source src="media/hero_loop_v2.mp4" type="video/mp4"></video>
+<script>
+(() => {
+  const v = document.querySelector(".hero-video"), net = navigator.connection;
+  if (net && (net.saveData || /2g|3g/.test(net.effectiveType || ""))) { v.firstElementChild.src = "media/hero_loop_mobile_v2.mp4"; v.load(); }
+  v.muted = v.defaultMuted = true; v.playsInline = true;
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+  const kick = () => { if (v.paused && !still.matches && !document.hidden && !v.classList.contains("off")) v.play().catch(() => {}); };
+  for (const e of ["loadedmetadata", "canplay"]) v.addEventListener(e, kick);
+  document.addEventListener("visibilitychange", kick);
+  addEventListener("pageshow", kick);
+  for (const e of ["touchend", "click", "keydown"]) addEventListener(e, kick, { passive: true });
+})();
+</script>
 <header class="hero film" id="top">
   <div class="hero-inner">
   <h1>Myodyssey</h1>
